@@ -2,19 +2,19 @@
 
 Helper functions for processing [New York Times Corpus](http://www.ldc.upenn.edu/Catalog/catalogEntry.jsp?catalogId=LDC2008T19).
 
-*   dollarSignSentences(folder) 
+*   ___dollarSignSentences(folder)___ 
 	* Extracts sentences containing '$' sign	from New York Times Corpus.
-*	writeSentences(outFile, sentences)
+*	___writeSentences(outFile, sentences)___
 	* Write sentences (one per line) from the list to the file.
-*	filterSentences(keyword, sentences):	
+*	___filterSentences(keyword, sentences)___
 	* Filters list of sentences by keyword.
-*	printRandomSentences(number, sentences)
+*	___printRandomSentences(number, sentences)___
 	* Prints 'number' of randomly picked sentences from the list.
-*	filterSentencesByLength(min, max, number, sentences)	
+*	___filterSentencesByLength(min, max, number, sentences)___
 	* Prints 'number' of sentences of length between min and max.
-*	extractIntoFile(keyword, outFile, sentences)
+*	___extractIntoFile(keyword, outFile, sentences)___
 	* Finds sentences containing keyword and write it to the file.
-*	pos(sentence)
+*	___pos(sentence)___
 	* Assign part-of-speech to words in sentence.
-*	graphChunks(sentence)
+*	___graphChunks(sentence)___
 	* Draws a graph of noun chunks.
