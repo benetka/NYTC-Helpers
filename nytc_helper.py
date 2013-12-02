@@ -7,6 +7,9 @@
 
 # New York Times Corpus helper functions.
 
+#os lib
+import os
+
 # natural language processing framework
 import nltk
 
@@ -24,6 +27,57 @@ import time
 
 # random numbers
 import random
+
+#import
+from collections import Counter
+from fnmatch import fnmatch
+
+
+def getSents(folder):
+	""" 
+	Extracts sentences from New York Times Corpus.
+
+	Keyword arguments:
+	folder    -- Folder with NY Times Corpus.
+
+    Return list of sentences.
+
+	"""
+	sentences = list()
+	start_time = time.time()
+	pattern = "*.xml"
+	start_seq = "<block class=\"full_text\">"
+	end_seq = "</block>"
+	wholeData = ""
+    
+	for path, subdirs, files in os.walk(folder):
+		for name in files:
+			if fnmatch(name, pattern):
+			# Inform users about current day folder
+				filename = os.path.join(path, name)
+				print "Processing: " + filename
+				# Read day files
+				#open xml file, read and close
+				file = open(filename,'r')
+				data = file.read()                 
+				file.close()
+				start = data.find(start_seq);                     
+				if (start > -1):
+					# extract just the article block
+					start += len(start_seq)
+					end = data.find(end_seq, start, len(data));
+					data = data[start:end]
+					# try to fin $ sign, clean text and tokenize
+					data = data.replace("<p>", " ")
+					data = data.replace("</p>", " ")
+					data = data.replace("''", "\"")
+					data = data.replace("\n", " ")
+					data = " ".join(data.split())
+					wholeData += data;
+	sentences = nltk.sent_tokenize(wholeData)
+	# Measure time
+	print time.time() - start_time, " seconds"
+	return sentences
 
 
 def dollarSignSentences(folder):
@@ -77,7 +131,6 @@ def dollarSignSentences(folder):
 	# Measure time
 	print time.time() - start_time, " seconds"
 	return filtered
-
 
 
 def writeSentences(outFile, sentences):
@@ -200,5 +253,37 @@ def graphChunks(sentence):
 	result.draw()
 
 
+def getVerbFreq(folder):
+	"""
+	Draws a graph of noun chunks.
 
+    Keyword arguments:
+    sentence  -- One sentence
+
+	"""	
+	start_time = time.time()
+	verbs = list()
+	sents = getSents(folder)
+	tokens = list()
+	for s in sents:
+		tokens += nltk.pos_tag(nltk.word_tokenize(s))
+	for t in tokens:
+		if(t[1] in ('VB', 'VBP', 'VBD')):
+			verbs.append(t[0])
+	cnts = countOccurances(verbs)
+	print cnts  
+	# Measure time
+	print time.time() - start_time, " seconds"                  
+	return verbs
+
+
+def countOccurances(array):
+	"""
+	Orders array by frequency
+
+	"""	
+	cnt = Counter()    
+	for word in array:
+		cnt[word] += 1
+	return cnt        
 
